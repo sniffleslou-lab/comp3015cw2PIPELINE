@@ -1,0 +1,43 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+
+# Build folders
+x64/
+Debug/
+Release/
+bin/
+build/
+
+# Compiled objects and binaries
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.dll
+*.lib
+*.exp
+
+# IntelliSense and precompiled headers
+*.ipch
+*.iobj
+*.idb
+*.opendb
+*.VC.db
+*.VC.opendb
+
+# Logs and caches
+*.log
+*.tlog
+*.cache
+
+# CMake (if used)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
