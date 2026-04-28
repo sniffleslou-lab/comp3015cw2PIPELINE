@@ -149,6 +149,9 @@ void SceneBasic_Uniform::render()
     glDepthMask(GL_TRUE);
 
     prog.use();
+    //noise deformation
+    prog.setUniform("uTime", tPrev);
+    prog.setUniform("uNoiseStrength", 0.9f); //strength
 
     
     prog.setUniform("UseTexture", 0);
