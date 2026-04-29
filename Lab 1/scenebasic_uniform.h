@@ -55,8 +55,14 @@ private:
   //  float angle;LAB1 LINE
     //glm::mat4 rotationMatrix;LAB1 LINE
 
+    //framebuffer
+    GLuint fbo;                     //framebuffer object
+    GLuint colorTex;                //color texture
+    GLuint depthRb;                 //depth renderbuffer
+    GLuint quadVao;                 //fullscreen quad vao
+    GLuint quadVbo;                 //fullscreen quad vbo
 
-
+    bool showEdges;                 //toggle for edge detection
 
 
     void compile();

@@ -88,6 +88,71 @@ void SceneBasic_Uniform::initScene()
     prog.setUniform("LightLd", vec3(0.8f));
     prog.setUniform("LightLs", vec3(0.8f));
 
+
+
+    ///post proccessing
+
+    showEdges = false;
+
+    //framebuffer
+    glGenBuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    //colour texture
+    glGenTextures(1, &colorTex);
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+
+    //depth renderbuffer
+    glGenRenderbuffers(1, &depthRb);
+    glBindBuffer(GL_RENDERBUFFER, depthRb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 800, 600);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRb);
+
+    //checks complete
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        std::cerr << "Framebuffer not complete" << std::endl;
+    }
+    //unbinds
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //FULLSCREEN
+    float quadVerts[] = {
+        //pos               texcoords
+        -1.0f, -1.0f,   0.0f, 0.0f,
+         1.0f, -1.0f,   1.0f, 0.0f,
+         1.0f,  1.0f,   1.0f, 1.0f,
+        -1.0f,  1.0f,   0.0f, 1.0f
+    };
+    GLuint quadEbo;
+    GLuint indisces[] = { 0,1,2,2,3,0 };
+
+    glGenVertexArrays(1, &quadVao);
+    glGenBuffers(1, &quadVbo);
+    glGenBuffers(1, &quadEbo);
+
+    glBindVertexArray(quadVao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVerts), quadVerts, GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEbo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indisces), indisces, GL_STATIC_DRAW);
+
+    //position(vec2)
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+    //texcoord
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+    glBindVertexArray(0);
+
+
   
 }
 
@@ -133,6 +198,10 @@ void SceneBasic_Uniform::update( float t )
 
 void SceneBasic_Uniform::render()
 {
+    //fbo and render scene into texture
+    glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+    glViewport(0, 0, 800, 600);
+    //before changes this was here ¬
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -197,6 +266,11 @@ void SceneBasic_Uniform::render()
     setMatrices();
     plane.render();
 
+    //posy procesed quad to the screen
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, 800, 600);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
    
 }
 
@@ -216,4 +290,12 @@ void SceneBasic_Uniform::resize(int w, int h)
     glViewport(0,0,w,h);
     float aspect = (float)w / h;
     projection = glm::perspective(glm::radians(60.0f), aspect, 0.3f, 100.0f);
+
+
+    //Resize framebuffer 
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glBindRenderbuffer(GL_TEXTURE_2D, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
