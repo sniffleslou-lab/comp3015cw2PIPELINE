@@ -173,6 +173,8 @@
     <None Include="shader\basic_uniform.vert" />
     <None Include="shader\PerFragment_phong.frag" />
     <None Include="shader\PerFragment_phong.vert" />
+    <None Include="shader\postprocess.frag" />
+    <None Include="shader\postprocess.vert" />
     <None Include="shader\skybox.frag" />
     <None Include="shader\skybox.vert" />
   </ItemGroup>

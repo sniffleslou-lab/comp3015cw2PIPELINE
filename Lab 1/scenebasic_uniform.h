@@ -64,6 +64,9 @@ private:
 
     bool showEdges;                 //toggle for edge detection
 
+    //post processing shader 
+    GLSLProgram postProg;
+
 
     void compile();
 
