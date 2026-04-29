@@ -95,7 +95,7 @@ void SceneBasic_Uniform::initScene()
     showEdges = false;
 
     //framebuffer
-    glGenBuffers(1, &fbo);
+    glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
     //colour texture
@@ -108,7 +108,7 @@ void SceneBasic_Uniform::initScene()
 
     //depth renderbuffer
     glGenRenderbuffers(1, &depthRb);
-    glBindBuffer(GL_RENDERBUFFER, depthRb);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthRb);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 800, 600);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRb);
 
@@ -171,6 +171,10 @@ void SceneBasic_Uniform::compile()
         skyProg.compileShader("shader/skybox.vert");
         skyProg.compileShader("shader/skybox.frag");
         skyProg.link();
+
+        postProg.compileShader("shader/postprocess.frag");
+        postProg.compileShader("shader/postprocess.vert");
+        postProg.link();
 
 	} catch (GLSLProgramException &e) {
 		cerr << e.what() << endl;
@@ -266,10 +270,25 @@ void SceneBasic_Uniform::render()
     setMatrices();
     plane.render();
 
-    //posy procesed quad to the screen
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glViewport(0, 0, 800, 600);
+    //post processing 
+    glBindFramebuffer(GL_FRAMEBUFFER, 0); 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    postProg.use();
+
+    //bind to scene texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    postProg.setUniform("SceneTex", 0);
+
+    //pass edge tool 
+    postProg.setUniform("ShowEdges", showEdges);
+
+    //drawfull screen 
+    glBindVertexArray(quadVao);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
 
    
 }
@@ -296,6 +315,11 @@ void SceneBasic_Uniform::resize(int w, int h)
     glBindTexture(GL_TEXTURE_2D, colorTex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    glBindRenderbuffer(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
+void SceneBasic_Uniform::handleInput(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        showEdges = !showEdges;
 }

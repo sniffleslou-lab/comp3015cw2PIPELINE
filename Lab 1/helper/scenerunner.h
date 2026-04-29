@@ -119,7 +119,7 @@ private:
     void mainLoop(GLFWwindow * window, Scene & scene) {
         while( ! glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) ) {
             GLUtils::checkForOpenGLError(__FILE__,__LINE__);
-			
+            scene.handleInput(window);
             scene.update(float(glfwGetTime()));
             scene.render();
             glfwSwapBuffers(window);

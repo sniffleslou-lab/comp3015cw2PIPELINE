@@ -2,9 +2,9 @@
 #define SCENEBASIC_UNIFORM_H
 
 #include "helper/scene.h"
-
 #include <glad/glad.h>
 #include "helper/glslprogram.h"
+#include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -79,6 +79,9 @@ public:
     void resize(int, int);
 
     void setMatrices();//lab2 
+
+    ///handleinput
+    void handleInput(GLFWwindow* window);
 
 };
 

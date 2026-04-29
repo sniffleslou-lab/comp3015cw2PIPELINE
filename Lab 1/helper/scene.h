@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+struct GLFWwindow;
 class Scene
 {
 protected:
@@ -39,9 +40,14 @@ public:
       Called when screen is resized
       */
     virtual void resize(int, int) = 0;
+
+    //for controls
+    virtual void handleInput(GLFWwindow* window){}
     
     void animate( bool value ) { m_animate = value; }
     bool animating() { return m_animate; }
+
+
     
 protected:
 	bool m_animate;

@@ -4,7 +4,7 @@ in vec2 TexCoord;
 out vec4 FragColor;
 
 uniform sampler2D SceneTex;
-uniform bool ShowEdge;
+uniform bool ShowEdges;
 
 //kernals for edge detection
 const float offset = 1.0 / 800.0;
@@ -46,7 +46,7 @@ void main(){
 
 	//if edge mode is active. override everything
 	if(ShowEdges){
-		vec3 edge = sobelEdge(TexCoord);
+		vec3 edges = sobelEdge(TexCoord);
 		FragColor = vec4(edges, 1.0);
 		return;
 	}
@@ -61,7 +61,7 @@ void main(){
 
 	//combine
 	vec3 finalCol = mix(col, shifted, 0.4); 
-	finalCol += vignette;
+	finalCol *= vignette;
 
 	FragColor = vec4(finalCol, 1.0);
 
