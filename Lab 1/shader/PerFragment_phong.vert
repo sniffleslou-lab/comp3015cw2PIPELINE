@@ -45,8 +45,16 @@ void main() {
 
     //only deform the plane
    if (pos.y < -0.44) {
+        //noise ripples
         float n = noise(pos.xz * 0.5 + uTime * 0.2);
-        pos.y += n * uNoiseStrength;
+        float noiseWave = n * uNoiseStrength;
+
+        //smooth sine wave
+        float sineWave = sin(pos.x * 2.0 + uTime * 1.5) * 0.05;
+
+        float sineWave2 = sin(pos.z * 3.0 + uTime * 1.2) * 0.03;
+
+        pos.y += uNoiseStrength + sineWave + sineWave2;
     }
 
 

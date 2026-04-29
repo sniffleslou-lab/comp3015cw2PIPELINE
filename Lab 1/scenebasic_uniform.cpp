@@ -151,7 +151,7 @@ void SceneBasic_Uniform::render()
     prog.use();
     //noise deformation
     prog.setUniform("uTime", tPrev);
-    prog.setUniform("uNoiseStrength", 0.9f); //strength
+    prog.setUniform("uNoiseStrength", 0.2f); //strength
 
     
     prog.setUniform("UseTexture", 0);
