@@ -27,6 +27,8 @@ uniform vec3 FogColor;
 uniform float FogStart;
 uniform float FogEnd;
 
+uniform float uTime;
+
 vec3 phongModel(vec3 position, vec3 n)
 {
     vec3 s = normalize(LightPosition - position);
@@ -49,6 +51,15 @@ vec3 phongModel(vec3 position, vec3 n)
     return ambient + diffuse + specular;
 }
 
+vec3 wood(vec2 uv, float time){
+    float rings = sin(uv.x * 20.0 + uv.y * 5.0);
+    float wobble = sin((uv.x + uv.y) * 10.0 + time * 2.0) * 0.2;
+    float grain = sin((rings + wobble) * 10.0);
+
+    float shade = smoothstep(0.0, 1.0, grain);
+    return mix(vec3(0.25, 0.12, 0.05), vec3(0.6, 0.3, 0.1), shade);
+}
+
 void main()
 {
     vec3 n = normalize(Normal);
@@ -56,8 +67,10 @@ void main()
 
     vec3 lighting = phongModel(Position, n);
 
-    vec3 baseColor = (UseTexture == 1) ? texColor : Kd;
+    //vec3 baseColor = (UseTexture == 1) ? texColor : Kd;
 
+    vec2 uv = TexCoord * 3.0;
+    vec3 baseColor = wood(uv, uTime);
     //toon shading 
     float levels = 4.0;
     vec3 toonLighting = floor(lighting * levels) / levels;

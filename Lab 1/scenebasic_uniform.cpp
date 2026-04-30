@@ -224,7 +224,7 @@ void SceneBasic_Uniform::render()
     prog.use();
     //noise deformation
     prog.setUniform("uTime", tPrev);
-    prog.setUniform("uNoiseStrength", 0.2f); //strength
+    prog.setUniform("uNoiseStrength", 0.7f); //strength
 
     
     prog.setUniform("UseTexture", 0);
@@ -268,6 +268,7 @@ void SceneBasic_Uniform::render()
     model = mat4(1.0f);
     model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
     setMatrices();
+    prog.setUniform("uTime", tPrev);
     plane.render();
 
     //post processing 
@@ -337,9 +338,12 @@ void SceneBasic_Uniform::handleInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -speed));
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, speed));
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+
         view = glm::translate(view, glm::vec3(-speed, 0.0f, 0.0f));
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+
         view = glm::translate(view, glm::vec3(speed, 0.0f, 0.0f));
 }
