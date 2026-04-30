@@ -93,7 +93,7 @@ void SceneBasic_Uniform::initScene()
     ///post proccessing
 
     showEdges = false;
-
+    postMode = 0;
     //framebuffer
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -283,6 +283,8 @@ void SceneBasic_Uniform::render()
 
     //pass edge tool 
     postProg.setUniform("ShowEdges", showEdges);
+    //post
+    postProg.setUniform("PostMode", postMode);
 
     //drawfull screen 
     glBindVertexArray(quadVao);
@@ -320,6 +322,12 @@ void SceneBasic_Uniform::resize(int w, int h)
 }
 
 void SceneBasic_Uniform::handleInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-        showEdges = !showEdges;
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+        postMode = 0; //dreamlike
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        postMode = 1; //edge detection
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+        postMode = 2; //grayscale
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        postMode = 3; //dreamlike
 }
