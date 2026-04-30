@@ -330,4 +330,16 @@ void SceneBasic_Uniform::handleInput(GLFWwindow* window) {
         postMode = 2; //grayscale
     if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
         postMode = 3; //dreamlike
+
+    const float speed = 0.001f;
+    
+    //movement
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -speed));
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, speed));
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(-speed, 0.0f, 0.0f));
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(speed, 0.0f, 0.0f));
 }
