@@ -94,6 +94,7 @@ void SceneBasic_Uniform::initScene()
 
     showEdges = false;
     postMode = 0;
+    woodMode = false;
     //framebuffer
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -269,6 +270,7 @@ void SceneBasic_Uniform::render()
     model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
     setMatrices();
     prog.setUniform("uTime", tPrev);
+    prog.setUniform("WoodMode", woodMode ? 1 : 0);
     plane.render();
 
     //post processing 
@@ -331,6 +333,11 @@ void SceneBasic_Uniform::handleInput(GLFWwindow* window) {
         postMode = 2; //grayscale
     if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
         postMode = 3; //dreamlike
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        woodMode = true; //wood texture
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+        woodMode = false;
+
 
     const float speed = 0.001f;
     

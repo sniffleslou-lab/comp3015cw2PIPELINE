@@ -65,6 +65,8 @@ private:
     bool showEdges;                 //toggle for edge detection
 
     int postMode;                   // post process mode
+
+    bool woodMode;                  //wood effect
     //post processing shader 
     GLSLProgram postProg;
 

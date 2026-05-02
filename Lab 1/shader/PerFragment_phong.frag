@@ -29,6 +29,9 @@ uniform float FogEnd;
 
 uniform float uTime;
 
+//for wood
+uniform int WoodMode;
+
 vec3 phongModel(vec3 position, vec3 n)
 {
     vec3 s = normalize(LightPosition - position);
@@ -70,7 +73,11 @@ void main()
     //vec3 baseColor = (UseTexture == 1) ? texColor : Kd;
 
     vec2 uv = TexCoord * 3.0;
-    vec3 baseColor = wood(uv, uTime);
+    vec3 baseColor;
+        if(WoodMode == 1)
+          baseColor = wood(uv, uTime);
+        else
+            baseColor =  (UseTexture == 1) ? texColor : Kd;
     //toon shading 
     float levels = 4.0;
     vec3 toonLighting = floor(lighting * levels) / levels;
