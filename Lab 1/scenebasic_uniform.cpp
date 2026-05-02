@@ -225,7 +225,7 @@ void SceneBasic_Uniform::render()
     prog.use();
     //noise deformation
     prog.setUniform("uTime", tPrev);
-    prog.setUniform("uNoiseStrength", 0.7f); //strength
+    prog.setUniform("uNoiseStrength", 0.4f); //strength
 
     
     prog.setUniform("UseTexture", 0);
@@ -332,7 +332,7 @@ void SceneBasic_Uniform::handleInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
         postMode = 2; //grayscale
     if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-        postMode = 3; //dreamlike
+        postMode = 3; //off
     if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
         woodMode = true; //wood texture
     if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
